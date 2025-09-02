@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏产品介绍 | SL.COM</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-black text-white overflow-x-hidden">
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-500" id="navbar">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="logo flex items-center">
+                <h1 class="text-2xl md:text-3xl font-orbitron font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">SL.COM</h1>
+            </div>
+            <!-- 桌面导航菜单 -->
+            <div class="hidden md:flex space-x-8">
+                <a href="#home" class="nav-link font-medium hover:text-blue-400 transition-colors">首页</a>
+                <a href="#features" class="nav-link font-medium hover:text-blue-400 transition-colors">特色</a>
+                <a href="#characters" class="nav-link font-medium hover:text-blue-400 transition-colors">角色</a>
+                <a href="#story" class="nav-link font-medium hover:text-blue-400 transition-colors">世界观</a>
+                <a href="#media" class="nav-link font-medium hover:text-blue-400 transition-colors">媒体</a>
+            </div>
+            <!-- 移动端菜单按钮 -->
+            <div class="md:hidden">
+                <button id="menu-btn" class="text-white focus:outline-none">
+                    <i class="fa fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-900/95 backdrop-blur-md">
+            <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+                <a href="#home" class="nav-link py-2 border-b border-gray-800 hover:text-blue-400 transition-colors">首页</a>
+                <a href="#features" class="nav-link py-2 border-b border-gray-800 hover:text-blue-400 transition-colors">特色</a>
+                <a href="#characters" class="nav-link py-2 border-b border-gray-800 hover:text-blue-400 transition-colors">角色</a>
+                <a href="#story" class="nav-link py-2 border-b border-gray-800 hover:text-blue-400 transition-colors">世界观</a>
+                <a href="#media" class="nav-link py-2 hover:text-blue-400 transition-colors">媒体</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 首页英雄区域 -->
+    <section id="home" class="relative h-screen flex items-center overflow-hidden">
+        <!-- 背景视频或图片 -->
+        <div class="absolute inset-0 z-0">
+            <div class="bg-gradient-to-b from-black/40 via-blue-900/20 to-black/80 absolute inset-0"></div>
+            <img src="https://picsum.photos/id/237/1920/1080" alt="游戏背景" class="w-full h-full object-cover">
+        </div>
+        <!-- 内容 -->
+        <div class="container mx-auto px-4 z-10">
+            <div class="max-w-3xl">
+                <h2 class="text-4xl md:text-6xl lg:text-7xl font-orbitron font-bold mb-6 opacity-0 transform translate-y-10" id="hero-title">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">星际</span>征程
+                </h2>
+                <p class="text-xl md:text-2xl mb-8 text-gray-200 opacity-0 transform translate-y-10" id="hero-subtitle">
+                    探索无尽宇宙，开启属于你的传奇冒险
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 opacity-0 transform translate-y-10" id="hero-buttons">
+                    <a href="#" class="btn-primary px-8 py-3 rounded-md text-lg font-medium transition-all duration-300 transform hover:scale-105">
+                        立即预约
+                    </a>
+                    <a href="#trailer" class="btn-secondary px-8 py-3 rounded-md text-lg font-medium transition-all duration-300 transform hover:scale-105">
+                        观看预告片
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- 滚动提示 -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center opacity-0 transition-opacity duration-1000" id="scroll-hint">
+            <span class="text-sm text-gray-300 mb-2">向下滚动探索</span>
+            <div class="animate-bounce w-6 h-6 border-2 border-white rounded-full flex justify-center items-start p-1">
+                <div class="w-1 h-2 bg-white rounded-full"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 游戏特色区域 -->
+    <section id="features" class="py-20 bg-gradient-to-b from-black to-blue-950">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-orbitron font-bold mb-4 opacity-0" data-scroll>
+                    游戏<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">特色</span>
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-600 mx-auto mb-6 opacity-0" data-scroll></div>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto opacity-0" data-scroll>
+                    体验前所未有的游戏玩法，探索广阔宇宙，挑战极限战斗
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 特色卡片 1 -->
+                <div class="feature-card bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-8 transform transition-all duration-500 hover:scale-105 hover:border-blue-500/50 opacity-0" data-scroll>
+                    <div class="feature-icon w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center mb-6">
+                        <i class="fa fa-globe text-2xl text-blue-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">广阔宇宙探索</h3>
+                    <p class="text-gray-300">超过100个可探索星球，每个星球都有独特的生态环境和隐藏秘密，等待你的发现。</p>
+                </div>
+
+                <!-- 特色卡片 2 -->
+                <div class="feature-card bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-8 transform transition-all duration-500 hover:scale-105 hover:border-blue-500/50 opacity-0" data-scroll>
+                    <div class="feature-icon w-16 h-16 rounded-full bg-purple-500/20 flex items-center justify-center mb-6">
+                        <i class="fa fa-users text-2xl text-purple-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">深度角色系统</h3>
+                    <p class="text-gray-300">定制你的角色，解锁独特技能和装备，打造专属战斗风格，应对各种挑战。</p>
+                </div>
+
+                <!-- 特色卡片 3 -->
+                <div class="feature-card bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-8 transform transition-all duration-500 hover:scale-105 hover:border-blue-500/50 opacity-0" data-scroll>
+                    <div class="feature-icon w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mb-6">
+                        <i class="fa fa-rocket text-2xl text-green-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">创新战斗机制</h3>
+                    <p class="text-gray-300">突破传统战斗模式，结合策略与操作，体验流畅的战斗体验和华丽的技能特效。</p>
+                </div>
+            </div>
+
+            <!-- 游戏数据 -->
+            <div class="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center opacity-0" data-scroll>
+                    <div class="counter text-4xl md:text-5xl font-bold text-blue-400 mb-2">100+</div>
+                    <p class="text-gray-400">可探索星球</p>
+                </div>
+                <div class="text-center opacity-0" data-scroll>
+                    <div class="counter text-4xl md:text-5xl font-bold text-purple-400 mb-2">50+</div>
+                    <p class="text-gray-400">角色选择</p>
+                </div>
+                <div class="text-center opacity-0" data-scroll>
+                    <div class="counter text-4xl md:text-5xl font-bold text-green-400 mb-2">500+</div>
+                    <p class="text-gray-400">武器装备</p>
+                </div>
+                <div class="text-center opacity-0" data-scroll>
+                    <div class="counter text-4xl md:text-5xl font-bold text-red-400 mb-2">1000+</div>
+                    <p class="text-gray-400">游戏任务</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 角色展示区域 -->
+    <section id="characters" class="py-20 bg-black relative overflow-hidden">
+        <!-- 背景效果 -->
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.3)_0%,rgba(0,0,0,0)_70%)]"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-orbitron font-bold mb-4 opacity-0" data-scroll>
+                    游戏<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">角色</span>
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-600 mx-auto mb-6 opacity-0" data-scroll></div>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto opacity-0" data-scroll>
+                    与个性鲜明的角色并肩作战，解锁他们的故事和专属技能
+                </p>
+            </div>
+
+            <div class="character-slider relative">
+                <div class="character-container overflow-hidden">
+                    <div class="character-wrapper flex transition-transform duration-500" id="characterWrapper">
+                        <!-- 角色卡片 1 -->
+                        <div class="character-card min-w-[280px] md:min-w-[350px] p-4">
+                            <div class="bg-gray-900/70 backdrop-blur-sm border border-gray-800 rounded-xl overflow-hidden group transform transition-all duration-500 hover:scale-105 hover:border-blue-500/50">
+                                <div class="character-image relative h-64 md:h-80 overflow-hidden">
+                                    <img src="https://picsum.photos/id/1005/600/800" alt="角色1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-70"></div>
+                                    <div class="absolute bottom-0 left-0 p-4">
+                                        <span class="bg-blue-500 text-white text-xs px-2 py-1 rounded">星际战士</span>
+                                    </div>
+                                </div>
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold mb-2 group-hover:text-blue-400 transition-colors">阿斯特拉</h3>
+                                    <p class="text-gray-300 mb-4">曾经是银河联盟的精英战士，拥有超强的战斗能力和领导才能。</p>
+                                    <div class="flex space-x-2">
+                                        <span class="bg-blue-500/20 text-blue-400 text-xs px-2 py-1 rounded">力量</span>
+                                        <span class="bg-purple-500/20 text-purple-400 text-xs px-2 py-1 rounded">敏捷</span>
+                                        <span class="bg-red-500/20 text-red-400 text-xs px-2 py-1 rounded">战斗</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 角色卡片 2 -->
+                        <div class="character-card min-w-[280px] md:min-w-[350px] p-4">
+                            <div class="bg-gray-900/70 backdrop-blur-sm border border-gray-800 rounded-xl overflow-hidden group transform transition-all duration-500 hover:scale-105 hover:border-blue-500/50">
+                                <div class="character-image relative h-64 md:h-80 overflow-hidden">
+                                    <img src="https://picsum.photos/id/1011/600/800" alt="角色2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-70"></div>
+                                    <div class="absolute bottom-0 left-0 p-4">
+                                        <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded">异能者</span>
+                                    </div>
+                                </div>
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold mb-2 group-hover:text-purple-400 transition-colors">莉娜</h3>
+                                    <p class="text-gray-300 mb-4">拥有操控元素能量的能力，是团队中不可或缺的支援角色。</p>
+                                    <div class="flex space-x-2">
+                                        <span class="bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded">元素</span>
+                                        <span class="bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded">支援</span>
+                                        <span class="bg-blue-500/20 text-blue-400 text-xs px-2 py-1 rounded">智慧</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 角色卡片 3 -->
+                        <div class="character-card min-w-[280px] md:min-w-[350px] p-4">
+                            <div class="bg-gray-900/70 backdrop-blur-sm border border-gray-800 rounded-xl overflow-hidden group transform transition-all duration-500 hover:scale-105 hover:border-blue-500/50">
+                                <div class="character-image relative h-64 md:h-80 overflow-hidden">
+                                    <img src="https://picsum.photos/id/1012/600/800" alt="角色3" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-70"></div>
+                                    <div class="absolute bottom-0 left-0 p-4">
+                                        <span class="bg-green-500 text-white text-xs px-2 py-1 rounded">机械师</span>
+                                    </div>
+                                </div>
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold mb-2 group-hover:text-green-400 transition-colors">泰隆</h3>
+                                    <p class="text-gray-300 mb-4">天才机械工程师，能够制造和操控各种先进的机械设备。</p>
+                                    <div class="flex space-x-2">
+                                        <span class="bg-gray-500/20 text-gray-400 text-xs px-2 py-1 rounded">机械</span>
+                                        <span class="bg-orange-500/20 text-orange-400 text-xs px-2 py-1 rounded">创造</span>
+                                        <span class="bg-purple-500/20 text-purple-400 text-xs px-2 py-1 rounded">策略</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 角色卡片 4 -->
+                        <div class="character-card min-w-[280px] md:min-w-[350px] p-4">
+                            <div class="bg-gray-900/70 backdrop-blur-sm border border-gray-800 rounded-xl overflow-hidden group transform transition-all duration-500 hover:scale-105 hover:border-blue-500/50">
+                                <div class="character-image relative h-64 md:h-80 overflow-hidden">
+                                    <img src="https://picsum.photos/id/1027/600/800" alt="角色4" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-70"></div>
+                                    <div class="absolute bottom-0 left-0 p-4">
+                                        <span class="bg-red-500 text-white text-xs px-2 py-1 rounded">赏金猎人</span>
+                                    </div>
+                                </div>
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold mb-2 group-hover:text-red-400 transition-colors">卡莎</h3>
+                                    <p class="text-gray-300 mb-4">神秘的赏金猎人，精通各种武器，以完成高难度任务而闻名。</p>
+                                    <div class="flex space-x-2">
+                                        <span class="bg-red-500/20 text-red-400 text-xs px-2 py-1 rounded">精准</span>
+                                        <span class="bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded">速度</span>
+                                        <span class="bg-blue-500/20 text-blue-400 text-xs px-2 py-1 rounded">潜行</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 滑动控制按钮 -->
+                <button id="prevBtn" class="absolute top-1/2 left-0 transform -translate-y-1/2 w-10 h-10 bg-gray-900/70 backdrop-blur-sm border border-gray-800 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition-colors z-10">
+                    <i class="fa fa-angle-left text-2xl"></i>
+                </button>
+                <button id="nextBtn" class="absolute top-1/2 right-0 transform -translate-y-1/2 w-10 h-10 bg-gray-900/70 backdrop-blur-sm border border-gray-800 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition-colors z-10">
+                    <i class="fa fa-angle-right text-2xl"></i>
+                </button>
+                
+                <!-- 指示器 -->
+                <div class="flex justify-center mt-8 space-x-2" id="characterIndicators">
+                    <button class="w-3 h-3 rounded-full bg-blue-500 transition-colors"></button>
+                    <button class="w-3 h-3 rounded-full bg-gray-600 transition-colors"></button>
+                    <button class="w-3 h-3 rounded-full bg-gray-600 transition-colors"></button>
+                    <button class="w-3 h-3 rounded-full bg-gray-600 transition-colors"></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 世界观区域 -->
+    <section id="story" class="py-20 bg-gradient-to-b from-blue-950 to-black">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-orbitron font-bold mb-4 opacity-0" data-scroll>
+                    游戏<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">世界观</span>
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-600 mx-auto mb-6 opacity-0" data-scroll></div>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto opacity-0" data-scroll>
+                    探索游戏背后的宏大故事和深邃的宇宙背景
+                </p>
+            </div>
+
+            <div class="story-container relative">
+                <!-- 时间线 -->
+                <div class="absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 via-purple-500 to-blue-500 transform -translate-x-1/2 hidden md:block"></div>
+                
+                <!-- 故事节点 1 -->
+                <div class="story-item flex flex-col md:flex-row items-center md:items-start mb-20 opacity-0" data-scroll>
+                    <div class="md:w-1/2 md:pr-16 md:text-right mb-8 md:mb-0">
+                        <span class="inline-block bg-blue-500/20 text-blue-400 text-sm px-3 py-1 rounded-full mb-4">星际纪元 2157年</span>
+                        <h3 class="text-2xl font-bold mb-4">银河联盟成立</h3>
+                        <p class="text-gray-300">人类首次与外星文明接触，多个智慧种族共同建立了银河联盟，旨在维护宇宙和平与促进文明交流。</p>
+                    </div>
+                    <div class="md:w-8 md:h-8 rounded-full bg-blue-500 border-4 border-gray-900 z-10 absolute left-1/2 transform -translate-x-1/2 hidden md:block"></div>
+                    <div class="md:w-1/2 md:pl-16 hidden md:block"></div>
+                </div>
+                
+                <!-- 故事节点 2 -->
+                <div class="story-item flex flex-col md:flex-row items-center md:items-start mb-20 opacity-0" data-scroll>
+                    <div class="md:w-1/2 md:pr-16 hidden md:block"></div>
+                    <div class="md:w-8 md:h-8 rounded-full bg-purple-500 border-4 border-gray-900 z-10 absolute left-1/2 transform -translate-x-1/2 hidden md:block"></div>
+                    <div class="md:w-1/2 md:pl-16">
+                        <span class="inline-block bg-purple-500/20 text-purple-400 text-sm px-3 py-1 rounded-full mb-4">星际纪元 2203年</span>
+                        <h3 class="text-2xl font-bold mb-4">暗影危机</h3>
+                        <p class="text-gray-300">神秘的暗影势力突然出现，开始袭击各个星系，银河联盟陷入危机，无数星球遭到破坏。</p>
+                    </div>
+                </div>
+                
+                <!-- 故事节点 3 -->
+                <div class="story-item flex flex-col md:flex-row items-center md:items-start mb-20 opacity-0" data-scroll>
+                    <div class="md:w-1/2 md:pr-16 md:text-right mb-8 md:mb-0">
+                        <span class="inline-block bg-blue-500/20 text-blue-400 text-sm px-3 py-1 rounded-full mb-4">星际纪元 2235年</span>
+                        <h3 class="text-2xl font-bold mb-4">希望之光</h3>
+                        <p class="text-gray-300">传说中的"星核"被发现，它拥有强大的能量，可以对抗暗影势力。一场关于星核的争夺战由此展开。</p>
+                    </div>
+                    <div class="md:w-8 md:h-8 rounded-full bg-blue-500 border-4 border-gray-900 z-10 absolute left-1/2 transform -translate-x-1/2 hidden md:block"></div>
+                    <div class="md:w-1/2 md:pl-16 hidden md:block"></div>
+                </div>
+                
+                <!-- 故事节点 4 -->
+                <div class="story-item flex flex-col md:flex-row items-center md:items-start opacity-0" data-scroll>
+                    <div class="md:w-1/2 md:pr-16 hidden md:block"></div>
+                    <div class="md:w-8 md:h-8 rounded-full bg-purple-500 border-4 border-gray-900 z-10 absolute left-1/2 transform -translate-x-1/2 hidden md:block"></div>
+                    <div class="md:w-1/2 md:pl-16">
+                        <span class="inline-block bg-purple-500/20 text-purple-400 text-sm px-3 py-1 rounded-full mb-4">星际纪元 2250年</span>
+                        <h3 class="text-2xl font-bold mb-4">你的故事开始</h3>
+                        <p class="text-gray-300">作为一名新晋的星际探险家，你将踏上寻找星核的旅程，揭开宇宙的奥秘，决定银河的命运。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 媒体区域 -->
+    <section id="media" class="py-20 bg-black">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-orbitron font-bold mb-4 opacity-0" data-scroll>
+                    游戏<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">媒体</span>
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-600 mx-auto mb-6 opacity-0" data-scroll></div>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto opacity-0" data-scroll>
+                    欣赏精美的游戏截图和视频，感受游戏的视觉魅力
+                </p>
+            </div>
+
+            <!-- 预告片 -->
+            <div class="mb-20 opacity-0" data-scroll>
+                <div id="trailer" class="relative rounded-xl overflow-hidden bg-gray-900 aspect-video flex items-center justify-center cursor-pointer group">
+                    <img src="https://picsum.photos/id/237/1200/675" alt="预告片封面" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-80">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-20 h-20 rounded-full bg-blue-600/80 flex items-center justify-center transform transition-transform duration-300 group-hover:scale-110">
+                            <i class="fa fa-play text-2xl text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 截图网格 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- 截图 1 -->
+                <div class="screenshot relative rounded-xl overflow-hidden cursor-pointer group opacity-0" data-scroll>
+                    <img src="https://picsum.photos/id/1035/800/600" alt="游戏截图1" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                        <div class="p-4 w-full">
+                            <h3 class="text-lg font-bold mb-1">星际战场</h3>
+                            <p class="text-sm text-gray-300">激烈的太空战斗场景</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 截图 2 -->
+                <div class="screenshot relative rounded-xl overflow-hidden cursor-pointer group opacity-0" data-scroll>
+                    <img src="https://picsum.photos/id/1036/800/600" alt="游戏截图2" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                        <div class="p-4 w-full">
+                            <h3 class="text-lg font-bold mb-1">异星探索</h3>
+                            <p class="text-sm text-gray-300">神秘的外星生态环境</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 截图 3 -->
+                <div class="screenshot relative rounded-xl overflow-hidden cursor-pointer group opacity-0" data-scroll>
+                    <img src="https://picsum.photos/id/1037/800/600" alt="游戏截图3" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                        <div class="p-4 w-full">
+                            <h3 class="text-lg font-bold mb-1">太空站</h3>
+                            <p class="text-sm text-gray-300">繁华的星际交易中心</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 截图 4 -->
+                <div class="screenshot relative rounded-xl overflow-hidden cursor-pointer group opacity-0" data-scroll>
+                    <img src="https://picsum.photos/id/1038/800/600" alt="游戏截图4" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                        <div class="p-4 w-full">
+                            <h3 class="text-lg font-bold mb-1">角色定制</h3>
+                            <p class="text-sm text-gray-300">个性化角色外观</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 截图 5 -->
+                <div class="screenshot relative rounded-xl overflow-hidden cursor-pointer group opacity-0" data-scroll>
+                    <img src="https://picsum.photos/id/1039/800/600" alt="游戏截图5" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                        <div class="p-4 w-full">
+                            <h3 class="text-lg font-bold mb-1">武器系统</h3>
+                            <p class="text-sm text-gray-300">多样化的武器装备</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 截图 6 -->
+                <div class="screenshot relative rounded-xl overflow-hidden cursor-pointer group opacity-0" data-scroll>
+                    <img src="https://picsum.photos/id/1040/800/600" alt="游戏截图6" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                        <div class="p-4 w-full">
+                            <h3 class="text-lg font-bold mb-1">太空舰队</h3>
+                            <p class="text-sm text-gray-300">壮观的宇宙飞船编队</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 预约区域 -->
+    <section class="py-20 bg-gradient-to-r from-blue-900/30 to-purple-900/30 relative overflow-hidden">
+        <!-- 背景效果 -->
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_50%,rgba(59,130,246,0.5)_0%,rgba(0,0,0,0)_50%)]"></div>
+            <div class="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_80%,rgba(168,85,247,0.5)_0%,rgba(0,0,0,0)_50%)]"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-4xl mx-auto bg-gray-900/70 backdrop-blur-md border border-gray-800 rounded-2xl p-8 md:p-12 transform transition-all duration-500 hover:border-blue-500/50">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl md:text-4xl font-orbitron font-bold mb-4">
+                        预约<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">游戏</span>
+                    </h2>
+                    <p class="text-xl text-gray-300">
+                        立即预约，获取游戏独家礼包和最新资讯
+                    </p>
+                </div>
+                
+                <form class="max-w-xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-300 mb-2">姓名</label>
+                            <input type="text" id="name" class="w-full px-4 py-3 bg-gray-800/70 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-white" placeholder="请输入您的姓名">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-300 mb-2">邮箱</label>
+                            <input type="email" id="email" class="w-full px-4 py-3 bg-gray-800/70 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-white" placeholder="请输入您的邮箱">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label for="platform" class="block text-sm font-medium text-gray-300 mb-2">游戏平台</label>
+                        <select id="platform" class="w-full px-4 py-3 bg-gray-800/70 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-white">
+                            <option value="pc">PC</option>
+                            <option value="playstation">PlayStation 5</option>
+                            <option value="xbox">Xbox Series X</option>
+                            <option value="nintendo">Nintendo Switch</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="w-5 h-5 rounded bg-gray-800 border-gray-700 text-blue-500 focus:ring-blue-500">
+                            <span class="ml-2 text-sm text-gray-300">我同意接收游戏最新资讯和活动信息</span>
+                        </label>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button type="submit" class="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20">
+                            立即预约
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-black py-12 border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="text-xl font-orbitron font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 mb-4">SL.COM</h3>
+                    <p class="text-gray-400 mb-4">打造沉浸式游戏体验，探索无限可能的虚拟世界。</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">
+                            <i class="fa fa-youtube-play"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-gray-200">游戏</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#features" class="text-gray-400 hover:text-blue-400 transition-colors">游戏特色</a></li>
+                        <li><a href="#characters" class="text-gray-400 hover:text-blue-400 transition-colors">角色介绍</a></li>
+                        <li><a href="#story" class="text-gray-400 hover:text-blue-400 transition-colors">世界观</a></li>
+                        <li><a href="#media" class="text-gray-400 hover:text-blue-400 transition-colors">媒体中心</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-gray-200">支持</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">常见问题</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">联系我们</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">隐私政策</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">服务条款</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-gray-200">订阅</h4>
+                    <p class="text-gray-400 mb-4">订阅我们的通讯，获取游戏最新资讯。</p>
+                    <form class="flex">
+                        <input type="email" placeholder="您的邮箱地址" class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white w-full">
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700 transition-colors">
+                            <i class="fa fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-500 text-sm">
+                <p>&copy; 2023 SL.COM 游戏工作室. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="backToTop" class="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center opacity-0 invisible transition-all duration-300 z-50 hover:bg-blue-700">
+        <i class="fa fa-angle-up text-2xl"></i>
+    </button>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
