@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,10 +22,20 @@
           <button v-for="item in navItems" :key="item.id"
             :class="{ active: currentPage === item.id }"
             @click="currentPage = item.id">
-            {{ item.label }}
+            {{ item.labels[currentLang] || item.labels['en'] }}
           </button>
         </nav>
-        <button class="theme-toggle" @click="toggleTheme" :title="isDark ? 'Switch to Light' : 'Switch to Dark'">
+        <!-- 语言切换 -->
+        <div class="lang-switcher">
+          <button v-for="lang in langs" :key="lang.code"
+            class="lang-btn"
+            :class="{ active: currentLang === lang.code }"
+            @click="currentLang = lang.code"
+            :title="lang.label">
+            {{ lang.flag }}
+          </button>
+        </div>
+        <button class="theme-toggle" @click="toggleTheme" :title="isDark ? 'Light Mode' : 'Dark Mode'">
           <span v-if="isDark" class="icon-sun">&#9788;</span>
           <span v-else class="icon-moon">&#9790;</span>
         </button>
@@ -45,17 +55,14 @@
               <div class="avatar-inner">S</div>
             </div>
             <h1 class="hero-title">
-              <span class="hero-title-line">Welcome to</span>
+              <span class="hero-title-line">{{ heroTexts[currentLang].welcome }}</span>
               <span class="hero-title-main">Slimeissoft's Blog</span>
             </h1>
-            <p class="hero-subtitle">Developer · Creative Technologist · Explorer</p>
-            <p class="hero-desc">
-              这里记录着我的学习笔记、项目分享与技术思考。<br>
-              Stay curious, stay coding.
-            </p>
+            <p class="hero-subtitle">{{ heroTexts[currentLang].role }}</p>
+            <p class="hero-desc">{{ heroTexts[currentLang].desc }}</p>
             <div class="hero-actions">
-              <button class="btn btn-primary" @click="currentPage = 'posts'">Read Articles</button>
-              <button class="btn btn-ghost" @click="currentPage = 'about'">About Me</button>
+              <button class="btn btn-primary" @click="currentPage = 'posts'">{{ heroTexts[currentLang].readBtn }}</button>
+              <button class="btn btn-ghost" @click="currentPage = 'about'">{{ heroTexts[currentLang].aboutBtn }}</button>
             </div>
           </div>
         </div>
@@ -63,8 +70,8 @@
         <!-- 最新文章 -->
         <div class="section-container">
           <div class="section-header">
-            <h2 class="section-title">Latest Articles</h2>
-            <button class="section-more" @click="currentPage = 'posts'">View All &rarr;</button>
+            <h2 class="section-title">{{ sectionTexts[currentLang].latest }}</h2>
+            <button class="section-more" @click="currentPage = 'posts'">{{ sectionTexts[currentLang].viewAll }} &rarr;</button>
           </div>
           <div class="posts-grid">
             <article v-for="post in latestPosts" :key="post.id" class="post-card" @click="openPost(post)">
@@ -86,12 +93,12 @@
       <!-- 文章列表 -->
       <section v-if="currentPage === 'posts'" class="page-posts">
         <div class="page-hero-small">
-          <h1>All Articles</h1>
-          <p>{{ posts.length }} articles published</p>
+          <h1>{{ sectionTexts[currentLang].allArticles }}</h1>
+          <p>{{ posts.length }} {{ sectionTexts[currentLang].articlesCount }}</p>
         </div>
         <div class="section-container">
           <div class="posts-list">
-            <article v-for="post in posts" :key="post.id" class="post-list-item" @click="openPost(post)">
+            <article v-for="post in displayPosts" :key="post.id" class="post-list-item" @click="openPost(post)">
               <div class="post-list-meta">
                 <span class="post-tag" :style="{ background: post.tagColor + '22', color: post.tagColor }">{{ post.tag }}</span>
                 <span class="post-date">{{ post.date }}</span>
@@ -112,7 +119,7 @@
       <!-- 文章详情 -->
       <section v-if="currentPage === 'post-detail'" class="page-post-detail">
         <div class="post-detail-container">
-          <button class="back-btn" @click="currentPage = 'posts'">&larr; Back to Articles</button>
+          <button class="back-btn" @click="currentPage = 'posts'">&larr; {{ sectionTexts[currentLang].back }}</button>
           <article class="post-detail-content">
             <header class="post-detail-header">
               <span class="post-tag" :style="{ background: activePost.tagColor + '22', color: activePost.tagColor }">{{ activePost.tag }}</span>
@@ -123,7 +130,7 @@
                 <span>{{ activePost.readTime }}</span>
               </div>
             </header>
-            <div class="post-body" v-html="activePost.content"></div>
+            <div class="post-body" v-html="activePost.body"></div>
           </article>
         </div>
       </section>
@@ -136,22 +143,22 @@
             <div class="avatar-inner-lg">S</div>
           </div>
           <h1>Slimeissoft</h1>
-          <p>Developer & Creative Technologist</p>
+          <p>Developer &amp; Creative Technologist</p>
         </div>
         <div class="section-container">
           <div class="about-grid">
             <div class="about-card">
-              <h3>About Me</h3>
-              <p>一名热爱技术的开发者，专注于现代 Web 技术栈的探索与实践。喜欢把复杂的问题简单化，也喜欢把简单的项目做得有趣。</p>
+              <h3>{{ aboutTexts[currentLang].aboutMe }}</h3>
+              <p>{{ aboutTexts[currentLang].aboutMeDesc }}</p>
             </div>
             <div class="about-card">
-              <h3>Skills</h3>
+              <h3>{{ aboutTexts[currentLang].skills }}</h3>
               <div class="skills-list">
                 <span v-for="skill in skills" :key="skill" class="skill-tag">{{ skill }}</span>
               </div>
             </div>
             <div class="about-card">
-              <h3>Contact</h3>
+              <h3>{{ aboutTexts[currentLang].contact }}</h3>
               <div class="contact-links">
                 <a href="https://github.com/Slimeissoft" target="_blank" class="contact-link">
                   <span class="contact-icon">&#9741;</span> GitHub
@@ -165,8 +172,8 @@
       <!-- 时间线 -->
       <section v-if="currentPage === 'timeline'" class="page-timeline">
         <div class="page-hero-small">
-          <h1>Timeline</h1>
-          <p>My journey in tech</p>
+          <h1>{{ sectionTexts[currentLang].timeline }}</h1>
+          <p>{{ sectionTexts[currentLang].timelineSub }}</p>
         </div>
         <div class="section-container">
           <div class="timeline">
@@ -185,7 +192,7 @@
 
     <!-- 页脚 -->
     <footer class="site-footer">
-      <p>&copy; 2025 Slimeissoft. Built with passion & Vue.js.</p>
+      <p>&copy; 2025 Slimeissoft. Built with passion &amp; Vue.js.</p>
     </footer>
   </div>
 
