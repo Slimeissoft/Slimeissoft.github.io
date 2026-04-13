@@ -112,7 +112,7 @@ createApp({
           id: 1,
           tag: 'Reflection',
           tagColor: '#f472b6',
-          date: '2025-04-10',
+          date: '2026-04-10',
           readTime: '5 min read',
           content: {
             en: {
@@ -229,7 +229,7 @@ createApp({
           id: 2,
           tag: 'AI Video',
           tagColor: '#a78bfa',
-          date: '2025-04-05',
+          date: '2026-04-05',
           readTime: '7 min read',
           content: {
             en: {
@@ -385,7 +385,7 @@ createApp({
           id: 3,
           tag: 'LLM',
           tagColor: '#34d399',
-          date: '2025-03-28',
+          date: '2026-03-28',
           readTime: '6 min read',
           content: {
             en: {
