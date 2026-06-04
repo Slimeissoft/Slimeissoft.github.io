@@ -849,6 +849,32 @@ body {
     background: rgba(56, 189, 248, 0.25);
     color: #38bdf8;
   }
+
+  /* 语言切换器 - 手机版优化 */
+  .lang-switcher {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    z-index: 1000;
+  }
+  
+  .lang-btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  
+  .lang-btn.active {
+    background: rgba(56, 189, 248, 0.25);
+    color: #38bdf8;
+  }
 }
 @media (max-width: 480px) {
   .hero-title-main { font-size: 2rem; }
