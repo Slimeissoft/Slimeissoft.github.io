@@ -7,8 +7,9 @@
    ============================================================ */
 
 const FALLBACK_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.js';
-const PAGES = ['home', 'posts', 'timeline', 'about'];
+const PAGES = ['home', 'posts', 'projects', 'timeline', 'about'];
 const LANGS = ['en', 'zh', 'ja'];
+const PALETTES = ['ember', 'indigo', 'pine', 'amber'];
 
 /* ---------- 初始化偏好 ---------- */
 function readTheme() {
@@ -18,8 +19,14 @@ function readTheme() {
   } catch (e) { return null; }
 }
 
-function detectLang() {
+function readPalette() {
   try {
+    const v = localStorage.getItem('palette');
+    return PALETTES.includes(v) ? v : 'ember';
+  } catch (e) { return 'ember'; }
+}
+
+function detectLang() {  try {
     const saved = localStorage.getItem('lang');
     if (saved && LANGS.includes(saved)) return saved;
   } catch (e) { /* 隐私模式下忽略 */ }
@@ -51,9 +58,74 @@ function createBlogApp() {
         navItems: [
           { id: 'home',     labels: { en: 'Home',     zh: '首页',   ja: 'ホーム' } },
           { id: 'posts',    labels: { en: 'Articles', zh: '文章',   ja: '記事' } },
+          { id: 'projects', labels: { en: 'Projects', zh: '项目',   ja: 'プロジェクト' } },
           { id: 'timeline', labels: { en: 'Timeline', zh: '时间线', ja: 'タイムライン' } },
           { id: 'about',    labels: { en: 'About',    zh: '关于',   ja: '概要' } },
         ],
+
+        palettes: [
+          { id: 'ember',  label: '朱砂' },
+          { id: 'indigo', label: '靛蓝' },
+          { id: 'pine',   label: '松绿' },
+          { id: 'amber',  label: '琥珀' },
+        ],
+        palette: readPalette(),
+        showPalette: false,
+
+        /* 软件项目：PicFlow */
+        project: {
+          name: 'PicFlow',
+          version: '1.4.0',
+          kicker: 'Featured Project · Desktop App',
+          tagline: 'Windows 桌面图片管理工具。本地整理、云端 AI 识别、隐私优先——敏感图片绝不上传。',
+          description: '一款为个人图库打造的 Windows 桌面应用：扫描本地文件夹、批量 AI 识别归类、去重、相册与标签管理。识别走你自己的多模态大模型 API，NSFW 图片先用本地模型判定，命中的绝不上传。',
+          platform: 'Windows 10 / 11 x64',
+          license: 'MIT License',
+          size: '安装包约 120 MB',
+          repo: 'https://github.com/Slimeissoft/PicFlow',
+          release: 'https://github.com/Slimeissoft/PicFlow/releases/latest',
+          stack: ['Electron', 'Node.js', 'AI Vision', 'Vanilla JS'],
+          techStack: ['Electron 33', 'Node.js', 'electron-updater', 'nsfwjs', 'pHash', 'OpenAI 兼容 API', 'Claude', '通义千问', 'DeepSeek', 'Kimi', '豆包', '硅基流动'],
+        },
+
+        projectFeatures: {
+          en: [
+            { title: 'AI Categorization', desc: 'Send images to your own multimodal model API and auto-file them into categories like "Genshin · Raiden Shogun".' },
+            { title: 'Privacy First', desc: 'NSFW images are screened by a local model first. Anything flagged never leaves your machine.' },
+            { title: 'Batch Labeling', desc: 'Select multiple images and assign a category in one go. Manual labels are never overwritten by AI.' },
+            { title: 'Duplicate Detection', desc: 'Perceptual hashing (pHash) finds duplicates and near-duplicates, so you can clean up in one pass.' },
+            { title: 'Instant Search', desc: 'Filter by date, type, tag or keyword across the whole library, with thumbnails that stay responsive.' },
+            { title: 'Auto Update', desc: 'New releases on GitHub trigger an in-app prompt with one-click download and install.' },
+          ],
+          zh: [
+            { title: 'AI 自动分类', desc: '把图片发给你自己的多模态大模型 API，自动归到「原神 · 雷电将军」这样的分类里。' },
+            { title: '隐私优先', desc: 'NSFW 图片先由本地模型判定，命中的图片绝不上传，只在本机打标记。' },
+            { title: '批量标注', desc: '多选图片一键指定分类。手动标注过的图片不会被 AI 覆盖。' },
+            { title: '重复检测', desc: '用感知哈希（pHash）找重复与近似图片，一次清理干净。' },
+            { title: '即时搜索', desc: '按日期、类型、标签或关键词筛选整个图库，缩略图滚动依然跟手。' },
+            { title: '自动更新', desc: 'GitHub 发布新版本后，应用内会收到提示，一键下载安装。' },
+          ],
+          ja: [
+            { title: 'AI による自動分類', desc: '自分のマルチモーダル API に画像を送り、「原神・雷電将軍」这样的分类に自動で振り分ける。' },
+            { title: 'プライバシー優先', desc: 'NSFW 画像はまずローカルモデルで判定。該当した画像は一切アップロードされない。' },
+            { title: '一括ラベリング', desc: '複数選択して一度に分類を指定。手動で付けたラベルが AI に上書きされることはない。' },
+            { title: '重複検出', desc: '知覚ハッシュ（pHash）で重複・類似画像を見つけ、まとめて整理できる。' },
+            { title: '高速検索', desc: '日付・種類・タグ・キーワードでライブラリ全体を絞り込み。サムネイルも軽快に動く。' },
+            { title: '自動アップデート', desc: 'GitHub で新バージョンが公開されると、アプリ内で通知し、ワンクリックで更新できる。' },
+          ],
+        },
+
+        projectTexts: {
+          en: { github: 'View on GitHub', download: 'Download', features: 'What it does', whatItDoes: 'Features', techStack: 'Built with', builtWith: 'Stack' },
+          zh: { github: '在 GitHub 查看', download: '下载安装包', features: '它能做什么', whatItDoes: '功能', techStack: '技术栈', builtWith: '用到的' },
+          ja: { github: 'GitHub で見る', download: 'ダウンロード', features: 'できること', whatItDoes: '機能', techStack: '技術スタック', builtWith: '使用技術' },
+        },
+
+        uiTexts: {
+          en: { theme_color: 'Accent color', to_light: 'Switch to light', to_dark: 'Switch to dark', builtWith: 'Designed & built by Slimeissoft' },
+          zh: { theme_color: '主题色', to_light: '切换到浅色', to_dark: '切换到深色', builtWith: '由 Slimeissoft 设计与开发' },
+          ja: { theme_color: 'テーマカラー', to_light: 'ライトに切り替え', to_dark: 'ダークに切り替え', builtWith: 'Designed & built by Slimeissoft' },
+        },
 
         langs: [
           { code: 'en', short: 'EN', label: 'English' },
@@ -69,25 +141,34 @@ function createBlogApp() {
 
         heroTexts: {
           en: {
+            badge: 'Available for work · Personal blog',
             headline: 'Building for the web,',
-            headlineSub: ' and writing it down.',
+            headlineSub: 'and writing it down.',
             desc: `Notes on technology, AI, and the craft of building things for the web.\nStay curious, stay shipping.`,
             readBtn: 'Read Articles',
-            aboutBtn: 'About Me',
+            projBtn: 'See Projects',
+            cardTitle: 'Notes on tech, AI, and the craft of building.',
+            cardFoot: 'Since 2024',
           },
           zh: {
+            badge: '开放合作 · 个人博客',
             headline: '写代码，',
             headlineSub: '也写过程。',
-            desc: `记录技术思考、AI 探索与 Web 开发的过程。\n保持好奇，保持动手。`,
+            desc: `记录技术思考、AI 探索与 Web 开发的过程。\n也把我自己做的软件，放在这里。`,
             readBtn: '阅读文章',
-            aboutBtn: '关于我',
+            projBtn: '看看项目',
+            cardTitle: '关于技术、AI，以及把东西做出来这件事。',
+            cardFoot: '始于 2024',
           },
           ja: {
+            badge: 'コラボ募集中 · パーソナルブログ',
             headline: '作ったものを、',
             headlineSub: '書き残す。',
-            desc: `技術の思考、AI の探求、Web 開発の過程を記録する。\n好奇心を絶やさず、手を動かし続ける。`,
+            desc: `技術の思考、AI の探求、Web 開発の過程を記録する。\n自分で作ったソフトウェアもここに置いています。`,
             readBtn: '記事を読む',
-            aboutBtn: '私について',
+            projBtn: 'プロジェクト',
+            cardTitle: '技術と AI と、ものづくりの記録。',
+            cardFoot: '2024 年から',
           },
         },
 
@@ -99,9 +180,15 @@ function createBlogApp() {
 
         sectionTexts: {
           en: {
-            latest: 'Latest Articles',
+            projectLabel: 'Project',
+            projectTitle: 'Things I build',
+            allProjects: 'All projects',
+            viewProject: 'View project',
+            blogLabel: 'Writing',
+            aboutLabel: 'Journey',
+            latest: 'Latest articles',
             viewAll: 'View all',
-            allArticles: 'All Articles',
+            allArticles: 'All articles',
             articlesCount: 'articles published',
             sortedByDate: 'Sorted by date',
             back: 'Back to Articles',
@@ -109,8 +196,15 @@ function createBlogApp() {
             nextPost: 'Next',
             timeline: 'Timeline',
             timelineSub: 'My journey in tech',
+            events: 'entries',
           },
           zh: {
+            projectLabel: '项目',
+            projectTitle: '我在做的东西',
+            allProjects: '全部项目',
+            viewProject: '查看项目',
+            blogLabel: '写作',
+            aboutLabel: '历程',
             latest: '最新文章',
             viewAll: '查看全部',
             allArticles: '全部文章',
@@ -121,8 +215,15 @@ function createBlogApp() {
             nextPost: '下一篇',
             timeline: '时间线',
             timelineSub: '我的技术之旅',
+            events: '条记录',
           },
           ja: {
+            projectLabel: 'プロジェクト',
+            projectTitle: '作っているもの',
+            allProjects: 'すべてのプロジェクト',
+            viewProject: 'プロジェクトを見る',
+            blogLabel: '執筆',
+            aboutLabel: '歩み',
             latest: '最新記事',
             viewAll: 'すべて見る',
             allArticles: 'すべての記事',
@@ -133,6 +234,7 @@ function createBlogApp() {
             nextPost: '次の記事',
             timeline: 'タイムライン',
             timelineSub: '私のテックジャーニー',
+            events: '件',
           },
         },
 
@@ -145,6 +247,8 @@ function createBlogApp() {
             details: 'Details',
             focus: 'Focus',
             focusValue: 'Web interfaces / AI tooling',
+            making: 'Building',
+            makingValue: 'PicFlow · desktop app',
             writing: 'Writing',
             writingValue: 'Chinese / English / Japanese',
             status: 'Status',
@@ -159,6 +263,8 @@ function createBlogApp() {
             details: '资料',
             focus: '专注',
             focusValue: 'Web 界面 / AI 工具',
+            making: '在做',
+            makingValue: 'PicFlow · 桌面应用',
             writing: '写作',
             writingValue: '中文 / 英文 / 日文',
             status: '状态',
@@ -173,6 +279,8 @@ function createBlogApp() {
             details: '詳細',
             focus: '関心',
             focusValue: 'Web インターフェース / AI ツール',
+            making: '制作中',
+            makingValue: 'PicFlow · デスクトップアプリ',
             writing: '執筆',
             writingValue: '中国語 / 英語 / 日本語',
             status: 'ステータス',
@@ -879,6 +987,15 @@ model = AutoModelForCausalLM.from_pretrained("google/gemma-4-27b-it")</code></pr
         window.scrollTo({ top: 0, behavior: 'auto' });
       },
 
+      /* ---------- 配色 ---------- */
+      setPalette(id) {
+        if (!PALETTES.includes(id)) return;
+        this.palette = id;
+        this.showPalette = false;
+        document.documentElement.dataset.palette = id;
+        try { localStorage.setItem('palette', id); } catch (e) { /* 忽略 */ }
+      },
+
       /* ---------- 语言 ---------- */
       setLang(code) {
         if (!LANGS.includes(code)) return;
@@ -915,6 +1032,17 @@ model = AutoModelForCausalLM.from_pretrained("google/gemma-4-27b-it")</code></pr
       const forced = readTheme();
       if (forced) document.documentElement.dataset.theme = forced;
 
+      /* 配色 */
+      document.documentElement.dataset.palette = this.palette;
+
+      /* 点空白处收起配色弹层 */
+      this._docClick = (e) => {
+        if (!this.showPalette) return;
+        if (e.target && e.target.closest && e.target.closest('.palette-wrap')) return;
+        this.showPalette = false;
+      };
+      document.addEventListener('click', this._docClick);
+
       /* 路由 */
       this.parseHash();
       window.addEventListener('popstate', this.onPopState);
@@ -938,6 +1066,7 @@ model = AutoModelForCausalLM.from_pretrained("google/gemma-4-27b-it")</code></pr
     beforeUnmount() {
       window.removeEventListener('popstate', this.onPopState);
       window.removeEventListener('scroll', this.handleScroll);
+      if (this._docClick) document.removeEventListener('click', this._docClick);
       if (this._mq && this._mqHandler) {
         if (this._mq.removeEventListener) this._mq.removeEventListener('change', this._mqHandler);
         else if (this._mq.removeListener) this._mq.removeListener(this._mqHandler);
