@@ -920,8 +920,7 @@ model = AutoModelForCausalLM.from_pretrained("google/gemma-4-27b-it")</code></pr
       },
 
       lastUpdated() {
-        const newest = this.posts.map(p => p.date).sort().pop();
-        return newest ? newest.slice(0, 7).replace('-', '.') : '—';
+        return '2026.10';
       },
 
       /* 同一年的事件归到一组，年份只出现一次 */
