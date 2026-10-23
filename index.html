@@ -1,210 +1,347 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slimeissoft's Blog</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>Slimeissoft — 写代码，也写过程</title>
+  <meta name="description" content="Slimeissoft 的个人博客与作品集。记录技术思考、AI 探索与 Web 开发的过程。">
+  <meta name="theme-color" content="#FAFAFA" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#04060A" media="(prefers-color-scheme: dark)">
+  <meta property="og:title" content="Slimeissoft — 写代码，也写过程">
+  <meta property="og:description" content="记录技术思考、AI 探索与 Web 开发的过程。">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23171717'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='17' font-weight='500' fill='%23fff' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div id="app">
-    <!-- 顶部导航 -->
-    <header class="site-header" :class="{ scrolled: isScrolled }">
-      <div class="header-inner">
-        <a href="#" class="logo" @click.prevent="currentPage='home'">
-          <span class="logo-text">Slimeissoft</span>
-          <span class="logo-dot"></span>
+  <div id="app" v-cloak>
+    <!-- 阅读进度：只在文章详情页出现 -->
+    <div class="progress" v-if="currentPage === 'post-detail'"
+      :style="{ transform: 'scaleX(' + progress + ')' }" aria-hidden="true"></div>
+
+    <!-- 顶栏 -->
+    <header class="topbar" :class="{ scrolled: isScrolled }">
+      <div class="container topbar-inner">
+        <a href="#/home" class="brand" @click.prevent="go('home')">
+          <span class="brand-mark">S</span>
+          <span>Slimeissoft</span>
         </a>
-        <nav class="main-nav">
+
+        <nav class="nav" aria-label="主导航">
           <button v-for="item in navItems" :key="item.id"
-            :class="{ active: currentPage === item.id }"
-            @click="currentPage = item.id">
-            {{ item.labels[currentLang] || item.labels['en'] }}
+            :class="{ active: currentPage === item.id || (item.id === 'posts' && currentPage === 'post-detail') }"
+            :aria-current="currentPage === item.id ? 'page' : null"
+            @click="go(item.id)">
+            {{ item.labels[currentLang] || item.labels.en }}
           </button>
         </nav>
-        <!-- 语言切换 -->
-        <div class="lang-switcher">
-          <button v-for="lang in langs" :key="lang.code"
-            class="lang-btn"
-            :class="{ active: currentLang === lang.code }"
-            @click="currentLang = lang.code"
-            :title="lang.label">
-            {{ lang.flag }}
+
+        <div class="topbar-actions">
+          <div class="segmented" role="group" aria-label="语言 / Language">
+            <button v-for="lang in langs" :key="lang.code"
+              :class="{ active: currentLang === lang.code }"
+              :aria-pressed="currentLang === lang.code"
+              :title="lang.label"
+              @click="setLang(lang.code)">
+              {{ lang.short }}
+            </button>
+          </div>
+
+          <button class="icon-btn" @click="toggleTheme"
+            :title="isDark ? themeLabels[currentLang].toLight : themeLabels[currentLang].toDark"
+            :aria-label="isDark ? themeLabels[currentLang].toLight : themeLabels[currentLang].toDark">
+            <!-- 深色时显示太阳（点击回浅色） -->
+            <svg v-if="isDark" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/>
+            </svg>
+            <svg v-else viewBox="0 0 24 24">
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>
+            </svg>
           </button>
         </div>
-        <button class="theme-toggle" @click="toggleTheme" :title="isDark ? 'Light Mode' : 'Dark Mode'">
-          <span v-if="isDark" class="icon-sun">&#9788;</span>
-          <span v-else class="icon-moon">&#9790;</span>
-        </button>
       </div>
     </header>
 
-    <!-- 页面内容 -->
     <main>
-      <!-- 首页 -->
-      <section v-if="currentPage === 'home'" class="page-home">
+      <!-- ============ 首页 ============ -->
+      <section v-if="currentPage === 'home'" class="page">
         <div class="hero">
-          <div class="hero-bg-orb orb-1"></div>
-          <div class="hero-bg-orb orb-2"></div>
-          <div class="hero-content">
-            <div class="hero-avatar">
-              <div class="avatar-ring"></div>
-              <div class="avatar-inner">S</div>
-            </div>
-            <h1 class="hero-title">
-              <span class="hero-title-line">{{ heroTexts[currentLang].welcome }}</span>
-              <span class="hero-title-main">Slimeissoft's Blog</span>
-            </h1>
-            <p class="hero-subtitle">{{ heroTexts[currentLang].role }}</p>
-            <p class="hero-desc">{{ heroTexts[currentLang].desc }}</p>
-            <div class="hero-actions">
-              <button class="btn btn-primary" @click="currentPage = 'posts'">{{ heroTexts[currentLang].readBtn }}</button>
-              <button class="btn btn-ghost" @click="currentPage = 'about'">{{ heroTexts[currentLang].aboutBtn }}</button>
+          <div class="container">
+            <div class="hero-inner">
+              <p class="eyebrow">
+                <span class="live-dot" aria-hidden="true"></span>
+                Personal Blog · Since 2024
+              </p>
+              <h1 class="hero-title">
+                {{ heroTexts[currentLang].headline }}<span class="hero-title-sub">{{ heroTexts[currentLang].headlineSub }}</span>
+              </h1>
+              <p class="hero-lead">{{ heroTexts[currentLang].desc }}</p>
+              <div class="hero-actions">
+                <button class="btn btn-primary" @click="go('posts')">
+                  {{ heroTexts[currentLang].readBtn }}
+                  <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+                </button>
+                <button class="btn btn-secondary" @click="go('about')">
+                  {{ heroTexts[currentLang].aboutBtn }}
+                </button>
+              </div>
+
+              <dl class="hero-stats">
+                <div>
+                  <dt>{{ statsTexts[currentLang].articles }}</dt>
+                  <dd>{{ posts.length }}</dd>
+                </div>
+                <div>
+                  <dt>{{ statsTexts[currentLang].topics }}</dt>
+                  <dd>{{ topics.length }}</dd>
+                </div>
+                <div>
+                  <dt>{{ statsTexts[currentLang].updated }}</dt>
+                  <dd>{{ lastUpdated }}</dd>
+                </div>
+              </dl>
             </div>
           </div>
         </div>
 
-        <!-- 最新文章 -->
-        <div class="section-container">
-          <div class="section-header">
+        <div class="container section">
+          <div class="section-head">
             <h2 class="section-title">{{ sectionTexts[currentLang].latest }}</h2>
-            <button class="section-more" @click="currentPage = 'posts'">{{ sectionTexts[currentLang].viewAll }} &rarr;</button>
+            <button class="link-btn" @click="go('posts')">
+              {{ sectionTexts[currentLang].viewAll }}
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </button>
           </div>
-          <div class="posts-grid">
-            <article v-for="post in latestPosts" :key="post.id" class="post-card" @click="openPost(post)">
-              <div class="post-card-meta">
-                <span class="post-tag" :style="{ background: post.tagColor + '22', color: post.tagColor }">{{ post.tag }}</span>
-                <span class="post-date">{{ post.date }}</span>
+
+          <div class="post-list">
+            <article v-for="(post, i) in latestPosts" :key="post.id"
+              class="post-row" tabindex="0" role="button"
+              @click="openPost(post)"
+              @keydown.enter="openPost(post)"
+              @keydown.space.prevent="openPost(post)">
+              <span class="post-idx">{{ pad(i + 1) }}</span>
+              <div class="post-main">
+                <div class="post-top">
+                  <span class="tag" :style="{ '--tag-c': post.tagColor }">{{ post.tag }}</span>
+                  <time class="post-date" :datetime="post.date">{{ post.date }}</time>
+                </div>
+                <h3 class="post-title">{{ post.title }}</h3>
+                <p class="post-excerpt">{{ post.excerpt }}</p>
               </div>
-              <h3 class="post-card-title">{{ post.title }}</h3>
-              <p class="post-card-excerpt">{{ post.excerpt }}</p>
-              <div class="post-card-footer">
-                <span class="post-read-time">{{ post.readTime }}</span>
-                <span class="post-arrow">&rarr;</span>
+              <div class="post-side">
+                <span class="post-time">{{ post.readTime }}</span>
+                <span class="post-arrow" aria-hidden="true">
+                  <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+                </span>
               </div>
             </article>
           </div>
         </div>
       </section>
 
-      <!-- 文章列表 -->
-      <section v-if="currentPage === 'posts'" class="page-posts">
-        <div class="page-hero-small">
-          <h1>{{ sectionTexts[currentLang].allArticles }}</h1>
-          <p>{{ posts.length }} {{ sectionTexts[currentLang].articlesCount }}</p>
+      <!-- ============ 文章列表 ============ -->
+      <section v-else-if="currentPage === 'posts'" class="page">
+        <div class="page-hero">
+          <div class="container">
+            <h1>{{ sectionTexts[currentLang].allArticles }}</h1>
+            <p>{{ posts.length }} {{ sectionTexts[currentLang].articlesCount }}</p>
+          </div>
         </div>
-        <div class="section-container">
-          <div class="posts-list">
-            <article v-for="post in displayPosts" :key="post.id" class="post-list-item" @click="openPost(post)">
-              <div class="post-list-meta">
-                <span class="post-tag" :style="{ background: post.tagColor + '22', color: post.tagColor }">{{ post.tag }}</span>
-                <span class="post-date">{{ post.date }}</span>
+
+        <div class="container">
+          <div class="list-meta">
+            <span>{{ sectionTexts[currentLang].sortedByDate }}</span>
+            <span>{{ statsTexts[currentLang].updated }} {{ lastUpdated }}</span>
+          </div>
+
+          <div class="post-list">
+            <article v-for="(post, i) in displayPosts" :key="post.id"
+              class="post-row" tabindex="0" role="button"
+              @click="openPost(post)"
+              @keydown.enter="openPost(post)"
+              @keydown.space.prevent="openPost(post)">
+              <span class="post-idx">{{ pad(i + 1) }}</span>
+              <div class="post-main">
+                <div class="post-top">
+                  <span class="tag" :style="{ '--tag-c': post.tagColor }">{{ post.tag }}</span>
+                  <time class="post-date" :datetime="post.date">{{ post.date }}</time>
+                </div>
+                <h3 class="post-title">{{ post.title }}</h3>
+                <p class="post-excerpt">{{ post.excerpt }}</p>
               </div>
-              <div class="post-list-content">
-                <h3>{{ post.title }}</h3>
-                <p>{{ post.excerpt }}</p>
-              </div>
-              <div class="post-list-footer">
-                <span class="post-read-time">{{ post.readTime }}</span>
-                <span class="post-arrow">&rarr;</span>
+              <div class="post-side">
+                <span class="post-time">{{ post.readTime }}</span>
+                <span class="post-arrow" aria-hidden="true">
+                  <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+                </span>
               </div>
             </article>
           </div>
         </div>
       </section>
 
-      <!-- 文章详情 -->
-      <section v-if="currentPage === 'post-detail'" class="page-post-detail">
-        <div class="post-detail-container">
-          <button class="back-btn" @click="currentPage = 'posts'">&larr; {{ sectionTexts[currentLang].back }}</button>
-          <article class="post-detail-content">
-            <header class="post-detail-header">
-              <span class="post-tag" :style="{ background: activePost.tagColor + '22', color: activePost.tagColor }">{{ activePost.tag }}</span>
+      <!-- ============ 文章详情 ============ -->
+      <section v-else-if="currentPage === 'post-detail' && activePost" class="page">
+        <div class="container container-narrow article-wrap">
+          <button class="back-link" @click="go('posts')">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3M7 4L3 8l4 4"/></svg>
+            {{ sectionTexts[currentLang].back }}
+          </button>
+
+          <article>
+            <header class="article-head">
+              <div class="post-top">
+                <span class="tag" :style="{ '--tag-c': activePost.tagColor }">{{ activePost.tag }}</span>
+                <time class="post-date" :datetime="activePost.date">{{ activePost.date }}</time>
+              </div>
               <h1>{{ activePost.title }}</h1>
-              <div class="post-detail-meta">
-                <span>{{ activePost.date }}</span>
-                <span class="dot">&middot;</span>
+              <div class="article-meta">
                 <span>{{ activePost.readTime }}</span>
+                <span class="sep">·</span>
+                <span>Slimeissoft</span>
               </div>
             </header>
-            <div class="post-body" v-html="activePost.body"></div>
+
+            <div class="prose" v-html="activePost.body"></div>
           </article>
+
+          <nav class="article-foot" aria-label="文章导航">
+            <a v-if="prevPost" :href="'#/post/' + prevPost.id" @click.prevent="openPost(prevPost)">
+              <span class="af-label">← {{ sectionTexts[currentLang].prevPost }}</span>
+              <span class="af-title">{{ prevPost.title }}</span>
+            </a>
+            <div v-else class="af-empty">
+              <span class="af-label">← {{ sectionTexts[currentLang].prevPost }}</span>
+              <span class="af-title" style="color: var(--muted)">—</span>
+            </div>
+
+            <a v-if="nextPost" :href="'#/post/' + nextPost.id" class="af-next" @click.prevent="openPost(nextPost)">
+              <span class="af-label">{{ sectionTexts[currentLang].nextPost }} →</span>
+              <span class="af-title">{{ nextPost.title }}</span>
+            </a>
+            <div v-else class="af-empty af-next">
+              <span class="af-label">{{ sectionTexts[currentLang].nextPost }} →</span>
+              <span class="af-title" style="color: var(--muted)">—</span>
+            </div>
+          </nav>
         </div>
       </section>
 
-      <!-- 关于我 -->
-      <section v-if="currentPage === 'about'" class="page-about">
-        <div class="page-hero-small">
-          <div class="about-avatar">
-            <div class="avatar-ring-lg"></div>
-            <div class="avatar-inner-lg">S</div>
+      <!-- ============ 时间线 ============ -->
+      <section v-else-if="currentPage === 'timeline'" class="page">
+        <div class="page-hero">
+          <div class="container">
+            <h1>{{ sectionTexts[currentLang].timeline }}</h1>
+            <p>{{ sectionTexts[currentLang].timelineSub }}</p>
           </div>
-          <h1>Slimeissoft</h1>
-          <p>Developer &amp; Creative Technologist</p>
         </div>
-        <div class="section-container">
-          <div class="about-grid">
-            <div class="about-card">
-              <h3>{{ aboutTexts[currentLang].aboutMe }}</h3>
-              <p>{{ aboutTexts[currentLang].aboutMeDesc }}</p>
-            </div>
-            <div class="about-card">
-              <h3>{{ aboutTexts[currentLang].skills }}</h3>
-              <div class="skills-list">
-                <span v-for="skill in skills" :key="skill" class="skill-tag">{{ skill }}</span>
+
+        <div class="container timeline-wrap">
+          <div class="timeline">
+            <div v-for="group in timelineGroups" :key="group.year" class="tl-group">
+              <div class="tl-year">{{ group.year }}</div>
+              <div class="tl-items">
+                <div v-for="(item, i) in group.items" :key="group.year + '-' + i" class="tl-item">
+                  <h3>{{ item.title }}</h3>
+                  <p>{{ item.desc }}</p>
+                </div>
               </div>
             </div>
-            <div class="about-card">
-              <h3>{{ aboutTexts[currentLang].contact }}</h3>
-              <div class="contact-links">
-                <a href="https://github.com/Slimeissoft" target="_blank" class="contact-link">
-                  <span class="contact-icon">&#9741;</span> GitHub
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 关于 ============ -->
+      <section v-else-if="currentPage === 'about'" class="page">
+        <div class="container about-wrap">
+          <header class="about-head">
+            <div class="about-mark" aria-hidden="true">S</div>
+            <div>
+              <h1>Slimeissoft</h1>
+              <p class="about-role">{{ aboutTexts[currentLang].role }}</p>
+            </div>
+          </header>
+
+          <div class="about-grid">
+            <div>
+              <div class="about-block">
+                <h2>{{ aboutTexts[currentLang].aboutMe }}</h2>
+                <p>{{ aboutTexts[currentLang].aboutMeDesc }}</p>
+              </div>
+
+              <div class="about-block">
+                <h2>{{ aboutTexts[currentLang].skills }}</h2>
+                <div class="chip-row">
+                  <span v-for="skill in skills" :key="skill" class="chip">{{ skill }}</span>
+                </div>
+              </div>
+            </div>
+
+            <aside>
+              <div class="about-block">
+                <h2>{{ aboutTexts[currentLang].details }}</h2>
+                <dl class="kv">
+                  <div>
+                    <dt>{{ aboutTexts[currentLang].focus }}</dt>
+                    <dd>{{ aboutTexts[currentLang].focusValue }}</dd>
+                  </div>
+                  <div>
+                    <dt>{{ aboutTexts[currentLang].writing }}</dt>
+                    <dd>{{ aboutTexts[currentLang].writingValue }}</dd>
+                  </div>
+                  <div>
+                    <dt>{{ aboutTexts[currentLang].status }}</dt>
+                    <dd>{{ aboutTexts[currentLang].statusValue }}</dd>
+                  </div>
+                </dl>
+              </div>
+
+              <div class="about-block about-contact">
+                <h2>{{ aboutTexts[currentLang].contact }}</h2>
+                <a class="btn btn-secondary" href="https://github.com/Slimeissoft" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" style="stroke-width:1.6">
+                    <path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.9a3.4 3.4 0 0 0-1-2.6c3-.3 5.5-1.6 5.5-6a4.7 4.7 0 0 0-1.3-3.2 4.4 4.4 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.1 1.8 5 2.1 5 2.1a4.4 4.4 0 0 0-.1 3.2A4.7 4.7 0 0 0 3.5 8.5c0 4.4 2.5 5.7 5.5 6a3.4 3.4 0 0 0-1 2.5V21"/>
+                  </svg>
+                  GitHub · @Slimeissoft
                 </a>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 时间线 -->
-      <section v-if="currentPage === 'timeline'" class="page-timeline">
-        <div class="page-hero-small">
-          <h1>{{ sectionTexts[currentLang].timeline }}</h1>
-          <p>{{ sectionTexts[currentLang].timelineSub }}</p>
-        </div>
-        <div class="section-container">
-          <div class="timeline">
-            <div v-for="(event, idx) in timeline" :key="idx" class="timeline-item" :class="{ right: idx % 2 === 1 }">
-              <div class="timeline-dot"></div>
-              <div class="timeline-content">
-                <span class="timeline-year">{{ event.year }}</span>
-                <h3>{{ event.title }}</h3>
-                <p>{{ event.desc }}</p>
-              </div>
-            </div>
+            </aside>
           </div>
         </div>
       </section>
     </main>
 
     <!-- 页脚 -->
-    <footer class="site-footer">
-      <p>&copy; 2026 Slimeissoft. Built with passion &amp; Vue.js.</p>
+    <footer class="footer">
+      <div class="container footer-inner">
+        <p>&copy; 2026 Slimeissoft</p>
+        <div class="footer-links">
+          <a href="https://github.com/Slimeissoft" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.9a3.4 3.4 0 0 0-1-2.6c3-.3 5.5-1.6 5.5-6a4.7 4.7 0 0 0-1.3-3.2 4.4 4.4 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.1 1.8 5 2.1 5 2.1a4.4 4.4 0 0 0-.1 3.2A4.7 4.7 0 0 0 3.5 8.5c0 4.4 2.5 5.7 5.5 6a3.4 3.4 0 0 0-1 2.5V21"/>
+            </svg>
+            GitHub
+          </a>
+          <a href="https://github.com/Slimeissoft/Slimeissoft.github.io" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M6 3h7v7M13 3L4 12"/>
+            </svg>
+            源码
+          </a>
+        </div>
+      </div>
     </footer>
   </div>
 
-  <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.4.21/vue.global.js"></script>
-<script>
-  // CDN fallback
-  if (typeof Vue === 'undefined') {
-    var script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.js';
-    document.head.appendChild(script);
-  }
-</script>
+  <noscript>
+    <p style="padding:80px 24px;font-family:system-ui,sans-serif;text-align:center;color:#666">
+      这个站点需要 JavaScript 才能运行，请在浏览器设置中开启后刷新页面。
+    </p>
+  </noscript>
+
+  <!-- Vue 3；加载失败时的降级逻辑写在 js/app.js 里 -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.4.21/vue.global.prod.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
